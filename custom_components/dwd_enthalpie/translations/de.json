@@ -1,0 +1,70 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Station hinzufügen",
+        "data": {
+          "state": "Bundesland"
+        }
+      },
+      "pick_station": {
+        "title": "Station hinzufügen",
+        "description": "Station in {state} auswählen.",
+        "data": {
+          "station": "Station",
+          "add_another": "Weitere Station hinzufügen"
+        }
+      }
+    },
+    "abort": {
+      "already_configured": "Diese Stationskombination ist bereits konfiguriert."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Stationen verwalten",
+        "description": "Aktuell konfiguriert: {current}",
+        "data": {
+          "action": "Aktion"
+        }
+      },
+      "add_state": {
+        "title": "Station hinzufügen",
+        "data": {
+          "state": "Bundesland"
+        }
+      },
+      "add_station": {
+        "title": "Station hinzufügen",
+        "description": "Station in {state} auswählen.",
+        "data": {
+          "station": "Station"
+        }
+      },
+      "remove": {
+        "title": "Stationen entfernen",
+        "data": {
+          "stations": "Zu entfernende Stationen"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "enthalpy": {
+        "name": "Enthalpie"
+      },
+      "heat_stress_class": {
+        "name": "Hitzestress",
+        "state": {
+          "kein Hitzestress": "kein Hitzestress",
+          "milder Hitzestress": "milder Hitzestress",
+          "mäßiger Hitzestress": "mäßiger Hitzestress",
+          "starker Hitzestress": "starker Hitzestress",
+          "extremer Hitzestress": "extremer Hitzestress"
+        }
+      }
+    }
+  }
+}

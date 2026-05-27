@@ -1,0 +1,70 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Add station",
+        "data": {
+          "state": "Federal state"
+        }
+      },
+      "pick_station": {
+        "title": "Add station",
+        "description": "Select a station in {state}.",
+        "data": {
+          "station": "Station",
+          "add_another": "Add another station"
+        }
+      }
+    },
+    "abort": {
+      "already_configured": "This set of stations is already configured."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Manage stations",
+        "description": "Currently configured: {current}",
+        "data": {
+          "action": "Action"
+        }
+      },
+      "add_state": {
+        "title": "Add station",
+        "data": {
+          "state": "Federal state"
+        }
+      },
+      "add_station": {
+        "title": "Add station",
+        "description": "Select a station in {state}.",
+        "data": {
+          "station": "Station"
+        }
+      },
+      "remove": {
+        "title": "Remove stations",
+        "data": {
+          "stations": "Stations to remove"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "enthalpy": {
+        "name": "Enthalpy"
+      },
+      "heat_stress_class": {
+        "name": "Heat stress",
+        "state": {
+          "kein Hitzestress": "No heat stress",
+          "milder Hitzestress": "Mild heat stress",
+          "mäßiger Hitzestress": "Moderate heat stress",
+          "starker Hitzestress": "Severe heat stress",
+          "extremer Hitzestress": "Extreme heat stress"
+        }
+      }
+    }
+  }
+}
