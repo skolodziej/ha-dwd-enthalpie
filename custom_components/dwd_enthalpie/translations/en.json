@@ -58,11 +58,11 @@
       "heat_stress_class": {
         "name": "Heat stress",
         "state": {
-          "kein Hitzestress": "No heat stress",
-          "milder Hitzestress": "Mild heat stress",
-          "mäßiger Hitzestress": "Moderate heat stress",
-          "starker Hitzestress": "Severe heat stress",
-          "extremer Hitzestress": "Extreme heat stress"
+          "no_heat_stress": "No heat stress",
+          "mild_heat_stress": "Mild heat stress",
+          "moderate_heat_stress": "Moderate heat stress",
+          "severe_heat_stress": "Severe heat stress",
+          "extreme_heat_stress": "Extreme heat stress"
         }
       }
     }

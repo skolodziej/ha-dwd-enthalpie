@@ -17,12 +17,12 @@ CONF_STATIONS = "stations"
 
 # Heat-stress classification thresholds (kJ/kg, daily maximum enthalpy)
 # Source: DWD legend on the source page.
-CLASS_NONE = "kein Hitzestress"
-CLASS_MILD = "milder Hitzestress"
-CLASS_MODERATE = "mäßiger Hitzestress"
-CLASS_STRONG = "starker Hitzestress"
-CLASS_EXTREME = "extremer Hitzestress"
-CLASS_UNKNOWN = "unbekannt"
+CLASS_NONE = "no_heat_stress"
+CLASS_MILD = "mild_heat_stress"
+CLASS_MODERATE = "moderate_heat_stress"
+CLASS_STRONG = "severe_heat_stress"
+CLASS_EXTREME = "extreme_heat_stress"
+CLASS_UNKNOWN = "unknown"
 
 
 def classify(value: float | int | None) -> str:

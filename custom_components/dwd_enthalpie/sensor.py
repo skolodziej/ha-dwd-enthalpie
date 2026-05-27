@@ -111,11 +111,11 @@ class EnthalpieClassSensor(_BaseStationSensor):
     _attr_translation_key = "heat_stress_class"
     _attr_device_class = SensorDeviceClass.ENUM
     _attr_options = [
-        "kein Hitzestress",
-        "milder Hitzestress",
-        "mäßiger Hitzestress",
-        "starker Hitzestress",
-        "extremer Hitzestress",
+        "no_heat_stress",
+        "mild_heat_stress",
+        "moderate_heat_stress",
+        "severe_heat_stress",
+        "extreme_heat_stress",
     ]
 
     def __init__(

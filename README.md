@@ -70,8 +70,8 @@ automation:
       - platform: state
         entity_id: sensor.dwd_enthalpie_rotenburg_wumme_hitzestress
         to:
-          - "starker Hitzestress"
-          - "extremer Hitzestress"
+          - "severe_heat_stress"
+          - "extreme_heat_stress"
     action:
       - service: switch.turn_on
         target:
