@@ -263,7 +263,6 @@ Die Stations-Tabelle steht in [`const.py`](custom_components/dwd_enthalpie/const
 
 Teile dieser Integration — darunter Code, Dokumentation und Konfigurationsbeispiele — wurden
 mithilfe von [Claude](https://claude.ai) (Anthropic) entwickelt und überarbeitet.
-Der Code wurde manuell geprüft und getestet; inhaltliche Verantwortung liegt beim Autor.
 
 ## Verwandte Indizes
 
