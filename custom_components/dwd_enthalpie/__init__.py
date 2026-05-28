@@ -12,7 +12,7 @@ from .coordinator import DwdEnthalpieCoordinator
 
 _LOGGER = logging.getLogger(__name__)
 
-PLATFORMS: list[Platform] = [Platform.IMAGE, Platform.SENSOR]
+PLATFORMS: list[Platform] = [Platform.CAMERA, Platform.IMAGE, Platform.SENSOR]
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
@@ -39,12 +39,14 @@ async def _async_update_listener(hass: HomeAssistant, entry: ConfigEntry) -> Non
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload a config entry."""
     unloaded = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
-    _SHARED_KEYS = {"coordinator", "maps_entry"}
+    _SHARED_KEYS = {"coordinator", "maps_entry", "camera_entry"}
     if unloaded:
         hass.data[DOMAIN].pop(entry.entry_id, None)
-        # Release the maps-entry lock when its owning entry is removed.
-        if hass.data[DOMAIN].get("maps_entry") == entry.entry_id:
-            hass.data[DOMAIN].pop("maps_entry", None)
+        # Release per-platform locks when their owning entry is removed so
+        # the next remaining entry (after a restart/reload) can re-claim them.
+        for key in ("maps_entry", "camera_entry"):
+            if hass.data[DOMAIN].get(key) == entry.entry_id:
+                hass.data[DOMAIN].pop(key, None)
         # If no config entries left, drop the shared coordinator too.
         if not any(k for k in hass.data[DOMAIN] if k not in _SHARED_KEYS):
             hass.data[DOMAIN].pop("coordinator", None)

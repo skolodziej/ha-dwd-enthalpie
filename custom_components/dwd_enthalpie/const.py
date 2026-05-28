@@ -9,8 +9,16 @@ SOURCE_URL = (
 )
 
 # Base URL for the Germany-wide enthalpy forecast map images (today + 4 days).
-# Files: enth_stationen.png, enth_stationen1.png … enth_stationen4.png
 MAP_BASE_URL = "https://www.dwd.de/DWD/warnungen/agrar/enth/"
+
+# Filenames for today + 4 forecast days (index = day offset).
+MAP_FILENAMES: tuple[str, ...] = (
+    "enth_stationen.png",
+    "enth_stationen1.png",
+    "enth_stationen2.png",
+    "enth_stationen3.png",
+    "enth_stationen4.png",
+)
 
 # How often to refresh. The DWD updates this page roughly once per day.
 # Hourly is polite and gives reasonable freshness if the DWD updates twice.
