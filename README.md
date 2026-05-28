@@ -86,6 +86,8 @@ Nachträgliche Änderungen über „Konfigurieren" auf der Integrationskachel.
 
 ### Prognosekarte (einzelner Tag)
 
+![Karten-Ansicht](docs/screenshot_karten.png)
+
 ```yaml
 type: picture-entity
 entity: image.dwd_enthalpie_map_today
@@ -101,6 +103,10 @@ title: Enthalpie-Vorhersage
 camera_image: camera.dwd_enthalpie_vorhersage_animation
 entities: []
 ```
+
+### 5-Tage-Tabelle & Kurve (apexcharts-card)
+
+![Sensor-Ansicht](docs/screenshot_sensoren.png)
 
 ### 5-Tage-Kurve (apexcharts-card)
 
