@@ -259,6 +259,12 @@ aktualisiert die Prognose typischerweise einmal täglich.
 PRs willkommen — insbesondere wenn der DWD die Stationsliste ändert.
 Die Stations-Tabelle steht in [`const.py`](custom_components/dwd_enthalpie/const.py).
 
+## KI-Hinweis
+
+Teile dieser Integration — darunter Code, Dokumentation und Konfigurationsbeispiele — wurden
+mithilfe von [Claude](https://claude.ai) (Anthropic) entwickelt und überarbeitet.
+Der Code wurde manuell geprüft und getestet; inhaltliche Verantwortung liegt beim Autor.
+
 ## Verwandte Indizes
 
 Der DWD veröffentlicht weitere landwirtschaftliche Warnindizes
