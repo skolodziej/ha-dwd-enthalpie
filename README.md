@@ -84,15 +84,34 @@ Nachträgliche Änderungen über „Konfigurieren" auf der Integrationskachel.
 
 ## Lovelace-Beispiele
 
-### Prognosekarte (einzelner Tag)
+### Prognosekarten
 
 ![Karten-Ansicht](docs/screenshot_karten.png)
 
+Heute groß, die vier Folgetage als Miniaturansicht darunter:
+
 ```yaml
-type: picture-entity
-entity: image.dwd_enthalpie_map_today
-show_name: false
-show_state: false
+type: grid
+cards:
+  - type: heading
+    heading: Karten
+    heading_style: title
+    icon: ios:map
+  - type: picture
+    image_entity: image.dwd_enthalpie_karten_heute
+  - type: horizontal-stack
+    cards:
+      - type: picture
+        image_entity: image.dwd_enthalpie_karten_morgen
+      - type: picture
+        image_entity: image.dwd_enthalpie_karten_ubermorgen
+      - type: picture
+        image_entity: image.dwd_enthalpie_karten_3_folgetag
+      - type: picture
+        image_entity: image.dwd_enthalpie_karten_4_folgetag
+    grid_options:
+      columns: 18
+      rows: auto
 ```
 
 ### Animierter Karten-Loop
@@ -104,26 +123,100 @@ camera_image: camera.dwd_enthalpie_vorhersage_animation
 entities: []
 ```
 
-### 5-Tage-Tabelle & Kurve (apexcharts-card)
+### 5-Tage-Tabelle & apexcharts-Kurve
 
 ![Sensor-Ansicht](docs/screenshot_sensoren.png)
 
-### 5-Tage-Kurve (apexcharts-card)
-
-Die numerischen Forecast-Werte lassen sich mit dem
-[apexcharts-card](https://github.com/RomRider/apexcharts-card) visualisieren:
+Die Kurve zeigt die Hitzestress-Schwellenwerte als farbige Zonen; die Tabelle
+kombiniert Enthalpie-Werte mit Wetterdaten aus einer eigenen Template-Entität
+(`sensor.hitzestress_forecast_<station>`, die `rows` mit `date`, `stress`,
+`temp`, `templow`, `humidity` und `enthalpie` liefert):
 
 ```yaml
-type: custom:apexcharts-card
-header:
-  show: true
-  title: Enthalpie-Vorhersage Rotenburg
-series:
-  - entity: sensor.dwd_enthalpie_rotenburg_wumme_enthalpie
-    data_generator: |
-      return entity.attributes.forecast.map((f) => [
-        new Date(f.date).getTime(), f.value
-      ]);
+type: grid
+cards:
+  - type: heading
+    heading: Enthalpie
+    heading_style: title
+    icon: mdi:weather-cloudy-alert
+  - type: markdown
+    content: >-
+      {% set rows = state_attr('sensor.hitzestress_forecast_konigsmoor', 'rows')
+      or [] %}
+
+        ## 5-Tage-Hitzestress Königsmoor
+
+        | Tag | 🌡️ Max/Min | 💧 | Enthalpie | Hitzestress |
+        |:--|:--:|:--:|:--:|:--|
+        {% for r in rows -%}
+        {%- set d = strptime(r.date, '%Y-%m-%d') -%}
+        {%- set wd = ['Mo','Di','Mi','Do','Fr','Sa','So'][d.weekday()] -%}
+        {%- set dot =
+             '🟢' if r.stress == 'kein'
+             else '🟡' if r.stress == 'mild'
+             else '🟠' if r.stress == 'mäßig'
+             else '🔴' if r.stress == 'stark'
+             else '🟣' if r.stress == 'extrem'
+             else '⚪' -%}
+        | **{{ wd }}** {{ d.strftime('%d.%m.') }} | {{ r.temp | round(0) }}° / {{ r.templow | round(0) }}° | {{ r.humidity | round(0) }}% | {{ r.enthalpie | round(0) }} kJ/kg | {{ dot }} {{ r.stress }} |
+        {% endfor %}
+  - type: custom:apexcharts-card
+    header:
+      show: true
+      title: Enthalpie-Vorhersage Rotenburg
+      show_states: true
+      colorize_states: true
+    graph_span: 5d
+    span:
+      start: day
+    yaxis:
+      - min: 30
+        max: 90
+        apex_config:
+          tickAmount: 6
+          annotations:
+            yaxis:
+              - "y": 50
+                y2: 58
+                fillColor: "#FAC775"
+                opacity: 0.15
+                label:
+                  text: mild
+                  style:
+                    fontSize: 10px
+              - "y": 58
+                y2: 67
+                fillColor: "#EF9F27"
+                opacity: 0.15
+                label:
+                  text: mäßig
+                  style:
+                    fontSize: 10px
+              - "y": 67
+                y2: 72
+                fillColor: "#E24B4A"
+                opacity: 0.15
+                label:
+                  text: stark
+                  style:
+                    fontSize: 10px
+              - "y": 72
+                y2: 90
+                fillColor: "#7F77DD"
+                opacity: 0.15
+                label:
+                  text: extrem
+                  style:
+                    fontSize: 10px
+    series:
+      - entity: sensor.dwd_enthalpie_rotenburg_wumme_enthalpie
+        name: Enthalpie
+        type: column
+        color: var(--primary-color)
+        data_generator: |
+          return entity.attributes.forecast.map((f) => [
+            new Date(f.date).getTime(), f.value
+          ]);
 ```
 
 ### Beispiel-Automation
