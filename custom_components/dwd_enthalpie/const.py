@@ -8,6 +8,10 @@ SOURCE_URL = (
     "https://www.wettergefahren.de/warnungen/indizes_landwirtschaft/enthalpie.html"
 )
 
+# Base URL for the Germany-wide enthalpy forecast map images (today + 4 days).
+# Files: enth_stationen.png, enth_stationen1.png … enth_stationen4.png
+MAP_BASE_URL = "https://www.dwd.de/DWD/warnungen/agrar/enth/"
+
 # How often to refresh. The DWD updates this page roughly once per day.
 # Hourly is polite and gives reasonable freshness if the DWD updates twice.
 UPDATE_INTERVAL_MINUTES = 60
