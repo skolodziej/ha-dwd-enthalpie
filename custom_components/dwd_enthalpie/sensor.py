@@ -102,6 +102,8 @@ class EnthalpieValueSensor(_BaseStationSensor):
         attrs: dict[str, Any] = {"station": self._station, "bundesland": self._state_name}
         if d:
             attrs["forecast"] = d["forecast"]
+        if self.coordinator.last_fetch is not None:
+            attrs["last_fetch"] = self.coordinator.last_fetch.isoformat()
         return attrs
 
 

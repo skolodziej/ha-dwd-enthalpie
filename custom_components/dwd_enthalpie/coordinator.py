@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import logging
-from datetime import timedelta
+from datetime import datetime, timedelta, timezone
 
 import aiohttp
 from homeassistant.core import HomeAssistant
@@ -25,6 +25,7 @@ class DwdEnthalpieCoordinator(DataUpdateCoordinator[dict[str, StationForecast]])
             name=DOMAIN,
             update_interval=timedelta(minutes=UPDATE_INTERVAL_MINUTES),
         )
+        self.last_fetch: datetime | None = None
 
     async def _async_update_data(self) -> dict[str, StationForecast]:
         session = async_get_clientsession(self.hass)
@@ -37,4 +38,6 @@ class DwdEnthalpieCoordinator(DataUpdateCoordinator[dict[str, StationForecast]])
 
         # Parsing is CPU-bound (small page, ~50KB). Run it in the executor to
         # keep the event loop responsive even on small devices.
-        return await self.hass.async_add_executor_job(parse_page, html)
+        result = await self.hass.async_add_executor_job(parse_page, html)
+        self.last_fetch = datetime.now(timezone.utc)
+        return result
