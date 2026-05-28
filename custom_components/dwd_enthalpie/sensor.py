@@ -59,7 +59,7 @@ class _BaseStationSensor(CoordinatorEntity[DwdEnthalpieCoordinator], SensorEntit
             identifiers={(DOMAIN, station)},
             name=f"DWD Enthalpie {station}",
             manufacturer="Deutscher Wetterdienst",
-            model="Enthalpie / Hitzestress (Rinder)",
+            model="Enthalpie / Hitzestress (Hühner)",
             configuration_url="https://www.wettergefahren.de/warnungen/indizes_landwirtschaft/enthalpie.html",
         )
 

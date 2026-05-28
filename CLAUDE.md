@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-A Home Assistant custom integration (HACS-compatible) that fetches the DWD (Deutscher Wetterdienst) enthalpy / heat-stress index for cattle farming. It scrapes one HTML page, parses ~600 German weather stations, and exposes two sensors per configured station: a numeric kJ/kg value and a text heat-stress class.
+A Home Assistant custom integration (HACS-compatible) that fetches the DWD (Deutscher Wetterdienst) enthalpy / heat-stress index for poultry farming. It scrapes one HTML page, parses ~600 German weather stations, and exposes two sensors per configured station: a numeric kJ/kg value and a text heat-stress class.
 
 ## Validation / CI
 

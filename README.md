@@ -2,7 +2,7 @@
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://hacs.xyz/docs/faq/custom_repositories)
 
-Home Assistant Custom Integration für den **Enthalpie-Index (Hitzestress für Rinder)**
+Home Assistant Custom Integration für den **Enthalpie-Index (Hitzestress für Hühner)**
 des Deutschen Wetterdienstes (DWD).
 
 Quelle: <https://www.wettergefahren.de/warnungen/indizes_landwirtschaft/enthalpie.html>
@@ -11,7 +11,7 @@ Quelle: <https://www.wettergefahren.de/warnungen/indizes_landwirtschaft/enthalpi
 
 Der DWD veröffentlicht für rund 600 deutsche Wetterstationen täglich das prognostizierte
 **Tagesmaximum der Enthalpie** (in kJ/kg) für heute + 4 Folgetage. Aus diesem Wert
-leitet der DWD eine Hitzestress-Klasse ab — relevant vor allem für die Rinderhaltung:
+leitet der DWD eine Hitzestress-Klasse ab — relevant vor allem für die Geflügelhaltung:
 
 | Enthalpie (kJ/kg) | Klasse                  |
 | ----------------- | ----------------------- |
@@ -23,12 +23,31 @@ leitet der DWD eine Hitzestress-Klasse ab — relevant vor allem für die Rinder
 
 ## Funktionsumfang
 
+### Stationssensoren (pro konfigurierter Station)
+
 - 📍 **Stationsauswahl per UI** — erst Bundesland, dann Station aus Dropdown
 - 🏠 **Mehrere Stationen** pro Installation (z. B. Heimatort + Stallstandort)
 - 📊 **Pro Station zwei Sensoren**:
-  - `sensor.dwd_enthalpie_<station>_enthalpie` — numerischer Wert in kJ/kg
-  - `sensor.dwd_enthalpie_<station>_hitzestress` — Klasse als Text (`enum`-Sensor)
-- 🗓️ **5-Tage-Forecast** als Attribut (`forecast`, `forecast_classes`)
+  - `sensor.dwd_enthalpie_<station>_enthalpie` — numerischer Wert in kJ/kg, inkl. `forecast`-Attribut (5 Tage)
+  - `sensor.dwd_enthalpie_<station>_hitzestress` — Hitzestress-Klasse als `enum`-Sensor, inkl. `forecast_classes`-Attribut
+- 🕐 **`last_fetch`-Attribut** am Enthalpie-Sensor — zeigt, wann die Daten zuletzt erfolgreich abgerufen wurden
+
+### Deutschlandkarten (Gerät „DWD Enthalpie Karten")
+
+- 🗺️ **5 Image-Entities** — die DWD-Prognosekarten für heute + 4 Folgetage:
+
+  | Entity | Zeitraum |
+  |---|---|
+  | `image.dwd_enthalpie_map_today` | heute |
+  | `image.dwd_enthalpie_map_day1` | morgen |
+  | `image.dwd_enthalpie_map_day2` | übermorgen |
+  | `image.dwd_enthalpie_map_day3` | 3. Folgetag |
+  | `image.dwd_enthalpie_map_day4` | 4. Folgetag |
+
+- 🎬 **Kamera-Entity `camera.dwd_enthalpie_vorhersage_animation`** — zeigt die 5 Karten als animierten Loop (~0,75 s pro Karte) im Live-View einer Camera-Karte
+
+### Allgemein
+
 - 🌐 **Mehrsprachig** — Deutsch und Englisch
 - 🔁 **Ein HTTP-Request für alle Stationen** — schont den DWD-Server
 - 🔄 **Optionen-Flow** — Stationen nachträglich hinzufügen / entfernen
@@ -59,9 +78,49 @@ Komplett über die UI. Beim Hinzufügen:
 3. Optional Häkchen „Weitere Station hinzufügen" → zurück zu Schritt 1
 4. Fertig — pro Station erscheint ein Gerät mit zwei Entitäten
 
+Die Deutschlandkarten erscheinen automatisch als eigenes Gerät, unabhängig von der Stationsauswahl.
+
 Nachträgliche Änderungen über „Konfigurieren" auf der Integrationskachel.
 
-## Beispiel-Automation
+## Lovelace-Beispiele
+
+### Prognosekarte (einzelner Tag)
+
+```yaml
+type: picture-entity
+entity: image.dwd_enthalpie_map_today
+show_name: false
+show_state: false
+```
+
+### Animierter Karten-Loop
+
+```yaml
+type: picture-glance
+title: Enthalpie-Vorhersage
+camera_image: camera.dwd_enthalpie_vorhersage_animation
+entities: []
+```
+
+### 5-Tage-Kurve (apexcharts-card)
+
+Die numerischen Forecast-Werte lassen sich mit dem
+[apexcharts-card](https://github.com/RomRider/apexcharts-card) visualisieren:
+
+```yaml
+type: custom:apexcharts-card
+header:
+  show: true
+  title: Enthalpie-Vorhersage Rotenburg
+series:
+  - entity: sensor.dwd_enthalpie_rotenburg_wumme_enthalpie
+    data_generator: |
+      return entity.attributes.forecast.map((f) => [
+        new Date(f.date).getTime(), f.value
+      ]);
+```
+
+### Beispiel-Automation
 
 ```yaml
 automation:
@@ -82,24 +141,6 @@ automation:
           message: >
             {{ states('sensor.dwd_enthalpie_rotenburg_wumme_enthalpie') }} kJ/kg
             in Rotenburg/Wümme – Stallventilation aktiviert.
-```
-
-## Lovelace-Beispiel
-
-Die 5-Tage-Vorhersage ist als Attribut verfügbar und lässt sich mit dem
-[apexcharts-card](https://github.com/RomRider/apexcharts-card) o. ä. visualisieren:
-
-```yaml
-type: custom:apexcharts-card
-header:
-  show: true
-  title: Enthalpie-Vorhersage Rotenburg
-series:
-  - entity: sensor.dwd_enthalpie_rotenburg_wumme_enthalpie
-    data_generator: |
-      return entity.attributes.forecast.map((f) => [
-        new Date(f.date).getTime(), f.value
-      ]);
 ```
 
 ## Datenquelle & Lizenz
